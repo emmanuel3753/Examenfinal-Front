@@ -13,7 +13,7 @@ function updateTodo(id, completed) {
   };
   json_to_send = JSON.stringify(json_to_send);
   $.ajax({
-      url: 'https://examenfinalyehrson.herokuapp.com/users/' + id,
+      url: 'https://examenfinalyehrson.herokuapp.com/todos/' + id,
       // url: 'https://tuapp.herokuapp.com/todos',
       headers: {
           'Content-Type':'application/json',
@@ -34,7 +34,7 @@ function updateTodo(id, completed) {
 
 function loadTodos() {
   $.ajax({
-    url: 'http://localhost:3000/todos',
+    url: 'https://examenfinalyehrson.herokuapp.com/todos',
     // url: 'https://tuapp.herokuapp.com/todos',
     headers: {
         'Content-Type':'application/json',
@@ -47,9 +47,10 @@ function loadTodos() {
 
       for( let i = 0; i < data.length; i++) {
         // aqui va su código para agregar los elementos de la lista
+        
         console.log(data[i].description)
         // algo asi:
-        // addTodo(data[i]._id, data[i].description, data[i].completed)
+        //addTodo(data[i]._id, data[i].description, data[i].completed)
       }
     },
     error: function(error_msg) {
@@ -59,7 +60,6 @@ function loadTodos() {
 }
 
 loadTodos()
-
 
 // o con jquery
 // $('input[name=newitem]').keypress(function(event){
@@ -77,8 +77,9 @@ input.addEventListener('keypress', function (event) {
       "description" : input.value
     };
     json_to_send = JSON.stringify(json_to_send);
+
     $.ajax({
-      url: 'http://localhost:3000/todos',
+      url: 'https://examenfinalyehrson.herokuapp.com/todos',
       // url: 'https://tuapp.herokuapp.com/todos',
       headers: {
           'Content-Type':'application/json',
@@ -100,5 +101,38 @@ input.addEventListener('keypress', function (event) {
 })
 
 function addTodo(id, todoText, completed) {
-  
+  json_to_send = {
+    "completed" : completed
+  };
+  json_to_send = JSON.stringify(json_to_send);
+
+  $.ajax({
+    url: 'https://examenfinalyehrson.herokuapp.com/todos/' + id,
+    // url: 'https://tuapp.herokuapp.com/todos',
+    headers: {
+        'Content-Type':'application/json',
+        'Authorization': 'Bearer ' + token
+    },
+    method: 'PATCH',
+    dataType: 'json',
+    data: json_to_send,
+    success: function(data){
+      
+      var li = data.createElement("li");
+      var inputValue = data.getElementById("newitem").value;
+      //var t = document.createTextNode(inputValue);
+      li.innerHTML = "<input type='checkbox'><span class='done'>"+inputValue+"</span>";
+      //li.appendChild(t);
+      if (inputValue === '') {
+        alert("Pues escribe algo :v");
+      } else {
+        data.getElementById("list").appendChild(li);
+        //ClickListener(newitem);
+        data.getElementById("newitem").value ="";   
+      } 
+    },
+    error: function(error_msg) {
+      alert((error_msg['responseText']));
+    }
+  });
 }

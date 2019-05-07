@@ -1,6 +1,7 @@
 $('#login_button').on('click', function(){
   // cargar email y password
-
+  const email = $("#email").val()
+  const password = $("#password").val()
   json_to_send = {
     "email": email,
     "password" : password
@@ -9,7 +10,7 @@ $('#login_button').on('click', function(){
   json_to_send = JSON.stringify(json_to_send);
 
   $.ajax({
-    url: 'https://examenfinalyehrson.herokuapp.com/users',
+    url: 'https://examenfinalyehrson.herokuapp.com/users/login',
     // url: 'https://tuapp.herokuapp.com/users/login',
     headers: {
         'Content-Type':'application/json'
