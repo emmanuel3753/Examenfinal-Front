@@ -47,10 +47,10 @@ function loadTodos() {
 
       for( let i = 0; i < data.length; i++) {
         // aqui va su código para agregar los elementos de la lista
-        
+        addTodo(data[i]._id, data[i].description, data[i].completed)
         console.log(data[i].description)
         // algo asi:
-        //addTodo(data[i]._id, data[i].description, data[i].completed)
+        
       }
     },
     error: function(error_msg) {
@@ -89,6 +89,7 @@ input.addEventListener('keypress', function (event) {
       dataType: 'json',
       data: json_to_send,
       success: function(data){
+        addTodo(id.data, todoText.data, completed.data)
         console.log(data)
         
       },
@@ -101,38 +102,11 @@ input.addEventListener('keypress', function (event) {
 })
 
 function addTodo(id, todoText, completed) {
-  json_to_send = {
-    "completed" : completed
-  };
-  json_to_send = JSON.stringify(json_to_send);
-
-  $.ajax({
-    url: 'https://examenfinalyehrson.herokuapp.com/todos/' + id,
-    // url: 'https://tuapp.herokuapp.com/todos',
-    headers: {
-        'Content-Type':'application/json',
-        'Authorization': 'Bearer ' + token
-    },
-    method: 'PATCH',
-    dataType: 'json',
-    data: json_to_send,
-    success: function(data){
-      
-      var li = data.createElement("li");
-      var inputValue = data.getElementById("newitem").value;
-      //var t = document.createTextNode(inputValue);
-      li.innerHTML = "<input type='checkbox'><span class='done'>"+inputValue+"</span>";
-      //li.appendChild(t);
-      if (inputValue === '') {
-        alert("Pues escribe algo :v");
-      } else {
-        data.getElementById("list").appendChild(li);
-        //ClickListener(newitem);
-        data.getElementById("newitem").value ="";   
-      } 
-    },
-    error: function(error_msg) {
-      alert((error_msg['responseText']));
-    }
-  });
+  if(completed){
+      let terminado = document.getElementById('finished-list')
+      terminado.innerHTML += '<li><input type="checkbox" name="todo" value="true" id="'+id+'" class="done"><span>'+todoText+'</span></li>\n'
+  } else{
+      let noTerminado = document.getElementById('unfinished-list')
+      noTerminado.innerHTML += '<li><input type="checkbox" name="todo" value="false" id="'+id+'"><span>'+todoText+'</span></li>\n'
+  }
 }
