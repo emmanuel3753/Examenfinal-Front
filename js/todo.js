@@ -89,7 +89,7 @@ input.addEventListener('keypress', function (event) {
       dataType: 'json',
       data: json_to_send,
       success: function(data){
-        addTodo(id.data, todoText.data, completed.data)
+        addTodo(data.id, data.todoText, data.completed)
         console.log(data)
         
       },
